@@ -1,0 +1,5 @@
+- 👋 Hi, I’m @stepkurniawan
+- 👀 I’m interested in games, learning new things, and teaching a bit :P
+- 🌱 I’m currently learning Data Science, Management, and also Cloud Infrastructure
+- 💞️ I’m looking to collaborate on anything easy and simple in Java, Python, or JavaScript!
+- 📫 How to reach me stephen.kurniawan.sos@gmail.com
