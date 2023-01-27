@@ -248,7 +248,7 @@ print(int(np.array(t[[51309]].loc[[51314]])))
 #Pupil n must arrive at one bus stop for her destination school within the schools arrival time
 
 mdl.add_indicator_constraints(mdl.indicator_constraint(m[n,j,i,b], int(np.array(tau_s[n].index[tau_s[n] == 1])) - int(np.array(w_up[n].index[w_up[n] == 1]))<= T[n,i]) for n in N  for i in I_s_n[n].index[I_s_n[n]==1].tolist() for j in L_ if j!=i for b in B)
-mdl.add_indicator_constraints(mdl.indicator_constraint(m[n,j,i,b], int(np.array(tau_s[n].index[tau_s[n] == 1])) - int(np.array(w_up[n].index[w_low[n] == 1]))>= T[n,i]) for n in N  for i in I_s_n[n].index[I_s_n[n]==1].tolist() for j in L_ if j!=i for b in B)
+mdl.add_indicator_constraints(mdl.indicator_constraint(m[n,j,i,b], int(np.array(tau_s[n].index[tau_s[n] == 1])) - int(np.array(w_low[n].index[w_low[n] == 1]))>= T[n,i]) for n in N  for i in I_s_n[n].index[I_s_n[n]==1].tolist() for j in L_ if j!=i for b in B)
 
 #If bus b travels from i to j then arrival time at j must be equal to travel time at i plus travel time from i to j
 mdl.add_constraints(A[j,b]<=A[i,b]+int(np.array(t[[i]].loc[[j]]))+M_transfer*(1-x[i,j,b]) 
@@ -298,7 +298,7 @@ mdl.add_constraints(mdl.sum(m[n,i,j,b]*int(np.array(r_n[n]))
 mdl.add_constraints(mdl.sum(m[n,i,j,b]*int(np.array(t[[i]].loc[[j]]))
                              for i in L_
                              for j in L_ if i!=j
-                             for b in B)<= int(np.array(max_tt_n.index[max_tt_n == 1])) for n in N)
+                             for b in B)<= int(np.array(max_tt_n[n].index[max_tt_n[n] == 1])) for n in N)
 
 
 from docplex.mp.conflict_refiner import ConflictRefiner
