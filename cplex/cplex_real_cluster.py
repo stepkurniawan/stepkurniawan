@@ -1,4 +1,4 @@
-pip install docplex
+
 
 from docplex.mp.model import Model
 mdl = Model(name="busLG")
