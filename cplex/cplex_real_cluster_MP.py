@@ -57,7 +57,7 @@ I_s_n = np.transpose(I_s_n)
 
 school_max_transfers_np = pd.read_excel('school_max_transfers_np.xlsx')
 school_max_transfers_np.index = [S]
-print(school_max_transfers_np)
+print("school_max_transfers_np", school_max_transfers_np)
 
 #l_s_n
 l_s_n=s_n.dot(school_max_transfers_np)
@@ -155,6 +155,7 @@ print(I_s_n[45].index[I_s_n[45]==1].tolist())
 print("Cplex is built")
 
 #cost function, check
+print("mdl.minimize")
 mdl.minimize((1-beta)*mdl.sum(x[i,j,b]*int(np.array(t[[i]].loc[[j]]))*q_fix + int(np.array(d[[i]].loc[[j]]))*x[i,j,b]*float(np.array(q_b.loc[[b]]))
                               for i in L_
                               for j in L_ if i!=j
@@ -165,35 +166,35 @@ mdl.minimize((1-beta)*mdl.sum(x[i,j,b]*int(np.array(t[[i]].loc[[j]]))*q_fix + in
                              for b in B
                              for n in N))
                          
-#A bus line must have a single origin at the virtual depot if the bus is used, check
+print("A bus line must have a single origin at the virtual depot if the bus is used, check")
 #mdl.add_constraints(x[0,i,b]>=mdl.sum(x[i,j,b] for j in L_ if j!=i)-mdl.sum(x[k,i,b] for k in L_ if k!=i) for b in B for i in L_)
 mdl.add_constraints(mdl.sum(x[0,i,b]for i in L_) <=1 for b in B)
 
 #no cycles
 #mdl.add_constraints(mdl.sum(x[j,i,b] for j in L_ if i!=j)+mdl.sum(x[i,j,b] for j in L_ if i!=j)<=1 for b in B for i in L_)
 
-#must return to virtual depot
+print("must return to virtual depot")
 mdl.add_constraints(mdl.sum(x[j,i,b] for j in L if i!=j)-mdl.sum(x[i,j,b] for j in L if i!=j)==0 for b in B for i in L_)
 
-#Every bus line may service each bus stop only once, check
+print("Every bus line may service each bus stop only once, check")
 mdl.add_constraints(mdl.sum(x[i,j,b] for j in L_ if i!=j) <= 1 
                     for b in B
                     for i in L)
 
-#Students can only use existing bus lines, check
+print("Students can only use existing bus lines, check")
 mdl.add_constraints(m[n,i,j,b] <= x[i,j,b]
                     for i in L_
                     for j in L_ if i != j
                     for b in B
                     for n in N)
 
-#If pupil n is assigned to bus stop i (yni = 1) which is not her destination bus stop i = isn she must leave the pickup busstop
+print("If pupil n is assigned to bus stop i (yni = 1) which is not her destination bus stop i = isn she must leave the pickup busstop")
 
 mdl.add_constraints(y_n[n].loc[i] <= mdl.sum(m[n,i,j,b]for j in L_ if j!=i for b in B)
                     for n in N for i in y_n[n].index[y_n[n]==1].tolist() if i in I_s_n[n].index[I_s_n[n]==0].tolist())
 
 
-#if pupil n arrives at bus stop and it is not her destination bus stop, she must travel on to another bus stop 
+print("if pupil n arrives at bus stop and it is not her destination bus stop, she must travel on to another bus stop ")
 
 mdl.add_constraints(mdl.sum(m[n,i,h,b]for i in L_ if h!=i for b in B)<=mdl.sum(m[n,h,j,b]for j in L_ if h!=j for b in B)
                     for n in N for h in I_s_n[n].index[I_s_n[n]==0].tolist())
@@ -204,14 +205,14 @@ mdl.add_constraints(mdl.sum(m[n,i,h,b]for i in L_ if h!=i for b in B)<=mdl.sum(m
                             #for i in I_s_n[n].index[I_s_n[n]==1].tolist()
                             #for j in L_ if i!=j) == 1 for n in N)
 
-#A student can leave a bus stop only once, check
+print("A student can leave a bus stop only once, check")
 mdl.add_constraints(mdl.sum(m[n,i,j,b] 
                             for j in L_ if j!=i
                             for b in B ) <= 1 
                     for i in L_
                     for n in N)
 
-#feasible transfers, check
+print("feasible transfers, check")
 mdl.add_constraints(mdl.sum(m[n,j,i,b] for j in L_ if j!=i) - mdl.sum(m[n,i,j,b] for j in L_ if j!=i) <= z[n,b,i]  
                     for i in L_
                     for n in N
@@ -222,14 +223,14 @@ mdl.add_constraints(mdl.sum(m[n,j,i,b] for j in L_ if j!=i) - mdl.sum(m[n,i,j,b]
                     #for b in B)
                     # 
 
-#Each pupil may only leave each bus b at most once, check
+print("Each pupil may only leave each bus b at most once, check")
 mdl.add_constraints(mdl.sum(z[n,b,i] for i in L_)<=1 
                     for b in B
                     for n in N)
 
 print(I_s_n[43].index[I_s_n[43]==0])
 
-#Each student (or sets of students) n does not exceed the transfer limit of their school sn, check
+print("Each student (or sets of students) n does not exceed the transfer limit of their school sn, check")
 mdl.add_constraints(mdl.sum(z[n,b,i] 
                             for b in B
                             for i in L_ if i in I_s_n[n].index[I_s_n[n]==0].tolist())<= int(np.array(l_s_n[n].index[l_s_n[n]==1].tolist())) for n in N)
@@ -238,7 +239,7 @@ mdl.add_constraints(mdl.sum(z[n,b,i]
                             for i in L_ if i in I_s_n[n].index[I_s_n[n]==1].tolist())== 1 for n in N)
 
 
-#definition of v[j,b1b2], check
+print("definition of v[j,b1b2], check")
 mdl.add_constraints(mdl.sum(m[n,i,j,b_1] for i in L_ if i!=j) + mdl.sum(m[n,j,k,b_2] for k in L_ if k!=j) <= (v[j,b_1,b_2]+1) 
                     for n in N
                     for j in L_
@@ -250,8 +251,7 @@ mdl.add_constraints(v[j,b_1,b_2] + v[j,b_2,b_1] <= 1
                     for b_1 in B
                     for b_2 in B if b_1 != b_2)                    
 
-#If pupil n travels from i to j then her arrival time at j must be greater or equal to the arrival time at i 
-# plus the time needed to travel from i to j (tij), check
+print("If pupil n travels from i to j then her arrival time at j must be greater or equal to the arrival time at i plus the time needed to travel from i to j (tij), check")
 mdl.add_constraints((T[n,i] + int(np.array(t[[i]].loc[[j]])) - M_transfer*(1-mdl.sum(m[n,i,j,b] for b in B))) <= T[n,j]
                     for i in L_
                     for j in L_ if j!=i
@@ -260,12 +260,12 @@ mdl.add_constraints((T[n,i] + int(np.array(t[[i]].loc[[j]])) - M_transfer*(1-mdl
 
 print(int(np.array(t[[51309]].loc[[51314]])))
 
-#Pupil n must arrive at one bus stop for her destination school within the schools arrival time
+print("Pupil n must arrive at one bus stop for her destination school within the schools arrival time")
 
 mdl.add_indicator_constraints(mdl.indicator_constraint(m[n,j,i,b], int(np.array(tau_s[n].index[tau_s[n] == 1])) - int(np.array(w_up[n].index[w_up[n] == 1]))<= T[n,i]) for n in N  for i in I_s_n[n].index[I_s_n[n]==1].tolist() for j in L_ if j!=i for b in B)
 mdl.add_indicator_constraints(mdl.indicator_constraint(m[n,j,i,b], int(np.array(tau_s[n].index[tau_s[n] == 1])) - int(np.array(w_low[n].index[w_low[n] == 1]))>= T[n,i]) for n in N  for i in I_s_n[n].index[I_s_n[n]==1].tolist() for j in L_ if j!=i for b in B)
 
-#If bus b travels from i to j then arrival time at j must be equal to travel time at i plus travel time from i to j
+print("If bus b travels from i to j then arrival time at j must be equal to travel time at i plus travel time from i to j")
 mdl.add_constraints(A[j,b]<=A[i,b]+int(np.array(t[[i]].loc[[j]]))+M_transfer*(1-x[i,j,b]) 
                     for i in L
                     for j in L_ if i!=j
@@ -275,8 +275,7 @@ mdl.add_constraints(A[j,b]>=A[i,b]+int(np.array(t[[i]].loc[[j]]))-M_transfer*(1-
                     for j in L_ if i!=j
                     for b in B)
 
-#If pupil n travels on bus b her arrival time at stop i has to be the same as of bus b
-#check
+print("If pupil n travels on bus b her arrival time at stop i has to be the same as of bus b check")
 mdl.add_constraints(T[n,i]>=A[i,b]-M_transfer*(1-mdl.sum(m[n,j,i,b] for j in L if j!=i)) 
                     for i in L
                     for n in N
@@ -286,9 +285,8 @@ mdl.add_constraints(T[n,i]<=A[i,b]+M_transfer*(1-mdl.sum(m[n,j,i,b] for j in L i
                     for n in N
                     for b in B)
 
-#If pupil n changes from b1 to b2 at stop i then the arrival time of b 
-#cant be greater than of b plus max waiting time y and not lower than arrival time of b plus min waiting time y
-#check
+print("If pupil n changes from b1 to b2 at stop i then the arrival time of b ")
+print("cant be greater than of b plus max waiting time y and not lower than arrival time of b plus min waiting time y check")
 mdl.add_constraints((A[i,b_1]+gamma_up+M_transfer*(1-v[i,b_1,b_2])) >= A[i,b_2]
                     for i in L
                     for n in N
@@ -301,7 +299,7 @@ mdl.add_constraints(A[i,b_2]>= (A[i,b_1]+gamma_low-M_transfer*(1-v[i,b_1,b_2]))
                     for b_2 in B if b_1!=b_2)
 
 
-# capacity constraint
+print("capacity constraint check")
 mdl.add_constraints(mdl.sum(m[n,i,j,b]*int(np.array(r_n[n])) 
                             for j in L_ if j!= i
                             for n in N ) <= int(np.array(c_b[b]))
@@ -319,8 +317,10 @@ mdl.add_constraints(mdl.sum(m[n,i,j,b]*int(np.array(t[[i]].loc[[j]]))
 from docplex.mp.conflict_refiner import ConflictRefiner
 
 cr = ConflictRefiner()
+print("Conflict refiner created")
 crr = cr.refine_conflict(mdl, display=True)
-cr.display_conflicts(crr)                
+print("Conflict refiner refined")
+cr.display_conflicts(crr) 
 
 print("Cplex tries to solve")
 solution=mdl.solve(log_output=True)
