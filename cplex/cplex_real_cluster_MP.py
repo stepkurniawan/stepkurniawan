@@ -1,8 +1,9 @@
 from docplex.mp.model import Model
 mdl = Model(name="busLG")
-mdl.context.cplex_parameters.threads = 64
 
 #enable paralell processing
+mdl.context.cplex_parameters.threads = 64
+mdl.context.cplex_parameters.parallel = -1 
 mdl.context.solver.agent = "local"
 mdl.context.solver.parallel = 4
 
