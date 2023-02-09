@@ -314,6 +314,8 @@ mdl.add_constraints(mdl.sum(m[n,i,j,b]*int(np.array(t[[i]].loc[[j]]))
                              for j in L_ if i!=j
                              for b in B)<= int(np.array(max_tt_n[n].index[max_tt_n[n] == 1])) for n in N)
 
+"""
+# Conflict refiner
 
 from docplex.mp.conflict_refiner import ConflictRefiner
 
@@ -322,6 +324,7 @@ print("Conflict refiner created")
 crr = cr.refine_conflict(mdl, display=True)
 print("Conflict refiner refined")
 cr.display_conflicts(crr) 
+"""
 
 print("Cplex tries to solve")
 solution=mdl.solve(log_output=True)
