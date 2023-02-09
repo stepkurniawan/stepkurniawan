@@ -277,23 +277,23 @@ mdl.add_constraints(A[j,b]>=A[i,b]+int(np.array(t[[i]].loc[[j]]))-M_transfer*(1-
                     for b in B)
 
 print("If pupil n travels on bus b her arrival time at stop i has to be the same as of bus b check")
-mdl.add_constraints(T[n,i]>=A[i,b]-M_transfer*(1-mdl.sum(m[n,j,i,b] for j in L if j!=i)) 
+mdl.add_constraints(T[n,i] >= A[i,b] - M_transfer * (1 - mdl.sum(m[n,j,i,b] for j in L if j != i)) 
                     for i in L
                     for n in N
                     for b in B)
-mdl.add_constraints(T[n,i]<=A[i,b]+M_transfer*(1-mdl.sum(m[n,j,i,b] for j in L if j!=i)) 
+mdl.add_constraints(T[n,i] <= A[i,b] + M_transfer * (1 - mdl.sum(m[n,j,i,b] for j in L if j != i)) 
                     for i in L
                     for n in N
                     for b in B)
 
 print("If pupil n changes from b1 to b2 at stop i then the arrival time of b ")
 print("cant be greater than of b plus max waiting time y and not lower than arrival time of b plus min waiting time y check")
-mdl.add_constraints((A[i,b_1]+gamma_up+M_transfer*(1-v[i,b_1,b_2])) >= A[i,b_2]
+mdl.add_constraints((A[i,b_1] + gamma_up + M_transfer * (1-v[i,b_1,b_2])) >= A[i,b_2]
                     for i in L
                     for n in N
                     for b_1 in B
                     for b_2 in B if b_1!=b_2)
-mdl.add_constraints(A[i,b_2]>= (A[i,b_1]+gamma_low-M_transfer*(1-v[i,b_1,b_2])) 
+mdl.add_constraints(A[i,b_2] >= (A[i,b_1] + gamma_low - M_transfer * (1 - v[i,b_1,b_2])) 
                     for i in L
                     for n in N
                     for b_1 in B
