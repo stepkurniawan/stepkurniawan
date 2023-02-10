@@ -126,8 +126,6 @@ T = mdl.continuous_var_dict(T_in, ub=None, name='t')
 beta = 0.5
 M_transfer = 10000
 
-print(int(np.array(tau_s[43].index[tau_s[43] == 1])))
-print(int(np.array(w_up[43].index[w_up[43] == 1])))
 print(I_s_n[45].index[I_s_n[45] == 1].tolist())
 print("Cplex is built")
 
@@ -243,7 +241,6 @@ mdl.add_constraints(
     for j in L_ if j != i
     for n in N)
 
-print(int(np.array(t[[51309]].loc[[51314]])))
 
 print("Pupil n must arrive at one bus stop for her destination school within the schools arrival time")
 
