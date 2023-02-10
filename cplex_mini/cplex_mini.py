@@ -126,7 +126,6 @@ T = mdl.continuous_var_dict(T_in, ub=None, name='t')
 beta = 0.5
 M_transfer = 10000
 
-print(I_s_n[45].index[I_s_n[45] == 1].tolist())
 print("Cplex is built")
 
 # cost function, check
