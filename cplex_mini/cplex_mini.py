@@ -317,13 +317,18 @@ print("Conflict refiner refined")
 cr.display_conflicts(crr) 
 """
 
-print("Cplex tries to solve")
-solution = mdl.solve(log_output=True)
-print("Cplex solved mdl.solve")
-
+print('first solution possible')
+mdl.parameters.mip.limits.solutions = 1
+solution=mdl.solve(log_output=True)
 print(solution)
 
-type(solution)
-
 with open("solution.txt", "w") as solfile:
+    solfile.write(mdl.solution.to_string())
+    
+print('solution under curent cost')
+mdl.parameters.mip.tolerances.uppercutoff = 1384
+solution2=mdl.solve(log_output=True)
+print(solution2)
+
+with open("solution2.txt", "w") as solfile:
     solfile.write(mdl.solution.to_string())
