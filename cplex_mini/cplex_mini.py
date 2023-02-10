@@ -300,10 +300,10 @@ mdl.add_constraints(mdl.sum(m[n, i, j, b] * int(np.array(r_n[n]))
 
 # OPTIONAL: to run parallely with and without this constraint -> max_tt needs to be creared
 
-# mdl.add_constraints(mdl.sum(m[n,i,j,b]*int(np.array(t[[i]].loc[[j]]))
-#                              for i in L_
-#                              for j in L_ if i!=j
-#                              for b in B)<= int(np.array(max_tt_n[n].index[max_tt_n[n] == 1])) for n in N)
+mdl.add_constraints(mdl.sum(m[n,i,j,b]*int(np.array(t[[i]].loc[[j]]))
+                             for i in L_
+                             for j in L_ if i!=j
+                             for b in B)<= int(np.array(max_tt_n[n].index[max_tt_n[n] == 1])) for n in N)
 
 """
 # Conflict refiner
