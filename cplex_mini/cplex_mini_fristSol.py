@@ -30,7 +30,7 @@ d.columns =[adj_ind]
 d.index = [adj_ind]
 
 N=student_df_agg.iloc[:,0].values.tolist()
-B=[5600,5606,5607,5608]
+B=[5600,5606,5607]
 L=time_adj_matrix_df.id.values.tolist()
 S = student_df_agg['school_name'].unique().tolist()
 L_=L[1:]
@@ -54,8 +54,7 @@ l_s_n = np.transpose(l_s_n)
 
 Bus=((B[0],1,81,0.003),
      (B[1],1,81,0.003),
-     (B[2],1,81,0.003),
-     (B[3],1,81,0.003),
+     (B[2],1,81,0.003)
      )
 
 Bus2=pd.DataFrame(Bus) #turning bus related parameters into dataframe
