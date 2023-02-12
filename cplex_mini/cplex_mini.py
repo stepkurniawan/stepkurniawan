@@ -209,7 +209,7 @@ mdl.add_constraints(mdl.sum(z[n, b, i] for i in L_) <= 1
                     for b in B
                     for n in N)
 
-print(I_s_n[43].index[I_s_n[43] == 0])
+
 
 print("Each student (or sets of students) n does not exceed the transfer limit of their school sn, check")
 mdl.add_constraints(mdl.sum(z[n, b, i]
@@ -241,7 +241,7 @@ mdl.add_constraints(
     for j in L_ if j != i
     for n in N)
 
-print(int(np.array(t[[51309]].loc[[51314]])))
+
 
 print("Pupil n must arrive at one bus stop for her destination school within the schools arrival time")
 
