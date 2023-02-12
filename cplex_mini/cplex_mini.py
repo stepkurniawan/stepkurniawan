@@ -67,9 +67,9 @@ q_fix = 40/60
 gamma_up=15
 gamma_low=5
 
-school_wait_up_np=np.array([[1]])
-school_wait_low_np=np.array([[1]])
-tau_np=np.array([[1]])
+school_wait_up_np=np.array([1])
+school_wait_low_np=np.array([1])
+tau_np=np.array([1])
 w_up_list=list([30])
 w_low_list=list([5])
 tau_list = list([480])
