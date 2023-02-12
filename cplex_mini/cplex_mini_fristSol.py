@@ -36,25 +36,28 @@ S = student_df_agg['school_name'].unique().tolist()
 L_=L[1:]
 
 #school of pupil
-student_school_np=np.array([1,1,1,1,1,1,1,1,1,1])
-s_n=pd.DataFrame(student_school_np,index=N,columns=S)
+student_school_np = pd.read_excel('student_school_np_mini.xlsx')
+s_n=pd.DataFrame(student_school_np.iloc[:,:])
+s_n.columns =[S]
+s_n.index = N
 
 
 #set of bus stops of school
-school_bus_stops_np=np.array([[0,0,0,0,0,1,0,0,0,0]])
-I_s=pd.DataFrame(school_bus_stops_np,index=S,columns=L_)
+I_s = pd.read_excel('I_s.xlsx') # NEW!!! now it is an excel file
+I_s.index = [S]
 
 #FIXED???: too many Bus stops in here in comparison to L_ & L... now L_ is all bus stops as we agreed (both pickup and school)
 I_s_n=s_n.dot(I_s)
 I_s_n = np.transpose(I_s_n)
 
-school_max_transfers_np=np.array([[1]])
+school_max_transfers_np = pd.read_excel('school_max_transfers_np_mini.xlsx')
+school_max_transfers_np.index = [S]
 l_s_n=s_n.dot(school_max_transfers_np)
 l_s_n = np.transpose(l_s_n)
 
 Bus=((B[0],1,81,0.003),
      (B[1],1,81,0.003),
-     (B[2],1,81,0.003)
+     (B[2],1,81,0.003),
      )
 
 Bus2=pd.DataFrame(Bus) #turning bus related parameters into dataframe
@@ -67,15 +70,13 @@ q_fix = 40/60
 gamma_up=15
 gamma_low=5
 
-school_wait_up_np=np.array([[1]])
-school_wait_low_np=np.array([[1]])
-tau_np=np.array([[1]])
-w_up_list=list([30])
-w_low_list=list([5])
-tau_list = list([480])
-w_up_sch_s=pd.DataFrame(school_wait_up_np,index=S,columns=w_up_list)
-w_low_sch_s=pd.DataFrame(school_wait_low_np,index=S,columns=w_low_list)
-tau_sch_s=pd.DataFrame(tau_np,index=S,columns=tau_list)
+
+w_up_sch_s = pd.read_excel('school_wait_up.xlsx')
+w_up_sch_s.index=[S]
+w_low_sch_s = pd.read_excel('school_wait_low.xlsx')
+w_low_sch_s.index=[S]
+tau_sch_s=pd.read_excel('tau_sch_s.xlsx')
+tau_sch_s.index=[S]
 
 w_up=s_n.dot(w_up_sch_s)
 w_up=np.transpose(w_up)
@@ -84,13 +85,13 @@ w_low=np.transpose(w_low)
 tau_s=s_n.dot(tau_sch_s)
 tau_s=np.transpose(tau_s)
 
-
 r_n = pd.read_excel('r_n.xlsx')
 r_n.index= N
 r_n = np.transpose(r_n)
 
-max_tt_n =pd.read_excel('max_tt_n.xlsx') # max travel time
-max_tt_n.index= N
+max_tt_n =pd.read_excel('max_tt_n.xlsx')
+max_tt_n.index= [S]
+max_tt_n=s_n.dot(max_tt_n)
 max_tt_n = np.transpose(max_tt_n)
 
 #
